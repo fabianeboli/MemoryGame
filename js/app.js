@@ -1,10 +1,11 @@
 //------------------------------Build the game field-------------------------------------------
 $(function () {
     $("#submit").on("click",function (event) {
-        var NUMCOL = $("#NumCol").val();
-        var NUMROW = $("#NumRows").val();
+        const NUMPAIR = $("#NumPairs").val();
+
         let move = 0;
-        buildTable(NUMCOL,NUMROW);
+        buildTable(NUMPAIR);
+        event.preventDefault();
         Stoper();
         numOfMoves(move);
         Score();
@@ -36,7 +37,7 @@ var Card = function (name,front) {
 
 
 let arrayOfCards = [];
-function buildTable(NumOfRows,NumofCols) {
+function buildTable(NumOfPairs) {
     const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
         'images/dolphin-marine-mammals-water-sea-64219-min.png',
         'images/melody-p-378512-min.png',
@@ -50,11 +51,24 @@ function buildTable(NumOfRows,NumofCols) {
 
     addAllCardsToArray(arrayOfCards,imgs);
     arrayOfCards = shuffle(arrayOfCards);
-
     let table = document.createElement("table");
     document.body.appendChild(table);
-
-    for(let i = 0; i<NumOfRows;i++){
+    let max = NumOfPairs*2;
+    for(let i = 0; i< max;i++ ) {
+    if(i % 5 === 0){
+        $("table").append("<tr>");
+        }
+        $("tr").last().append("<td>");
+       $("td").last().prepend("<div class='flip-container' onclick='this.classList.toggle(hover)'>");
+        $(".flip-container").last().prepend("<div class='flipper "+arrayOfCards[i].name+"'>");
+        //Add cards front and back side of the card
+        $(".flipper").last().prepend("<div class='back'>");
+        $(".back").last().prepend("<img src="+arrayOfCards[i].front+" >");
+        $(".back").last().after("<div class='front'>");
+        $(".front").last().prepend("<img src="+arrayOfCards[i].back+" >");
+    }
+}
+/* for(let i = 0; i<NumOfRows;i++){
         $("table").append("<tr>");
         for(let j = 0;j<NumofCols;j++){
             $("tr").last().append("<td>");
@@ -64,10 +78,8 @@ function buildTable(NumOfRows,NumofCols) {
             $(".flipper").last().prepend("<div class='back'>");
             $(".back").last().prepend("<img src="+arrayOfCards[j].front+" >");
             $(".back").last().after("<div class='front'>");
-            $(".front").last().prepend("<img src="+arrayOfCards[j].back+" >");
-        }
-    }
-}
+            $(".front").last().prepend("<img src="+arrayOfCards[j].back+" >");*/
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
