@@ -8,11 +8,12 @@
 <body>
 <div id="Time"></div>
 <div id="Moves"></div>
+<div id="Score"></div>
 <form class="form-inline">
     <label for="NumRows">Number of rows</label>
-    <input type="number" id="NumRows" name="NumRows" >
+    <input type="number" id="NumRows" min="1" max="8" name="NumRows" >
     <label for="NumCol">Number of columns</label>
-    <input type="number" id="NumCol" name="NumCols" >
+    <input type="number" id="NumCol" min="1" max="8" name="NumCols" >
     <input type="submit" id="submit" value="Play the game">
 </form>
 

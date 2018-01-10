@@ -1,11 +1,16 @@
-body{
-    width: 900px;
+form{
+    width: 1000px;
     margin: 2% auto;
 }
 table{
+    width: 1000px;
     alignment: center;
+    margin: 3% auto;
 }
-
+img{
+    width: 7.0em;
+    height: 9.0em;
+}
 .flip-container{
     perspective: 1000px;
 }
@@ -14,9 +19,8 @@ table{
     }
 .flip-container, .front, .back {
     width: 10.0em;
-    height: 15.0em;
+    height: 10.0em;
 }
-
 .flipper{
     transition: 0.6s;
     transform-style: preserve-3d;
