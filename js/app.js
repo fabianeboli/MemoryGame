@@ -2,16 +2,37 @@
 $(function () {
     $("#submit").on("click",function (event) {
         const NUMPAIR = $("#NumPairs").val();
-
         let move = 0;
+        let score = 0;
+        let turn = 0;
+        let Imove,IImove;
+
         buildTable(NUMPAIR);
-        event.preventDefault();
         Stoper();
         numOfMoves(move);
-        Score();
+        Score(score);
+
         $(document).on("click",".flip-container",function () {
-           $(this).toggleClass('hover');
-            numOfMoves(move++);
+            $(this).toggleClass('hover');
+            if (turn === 0) {
+                if(Imove !== undefined && IImove !== undefined){
+                    $(IImove).toggleClass('hover');
+                    $(Imove).toggleClass('hover');
+                }
+                    Imove = $(this);
+                    console.log("I move " + $(Imove).attr("class"));
+                    ++turn;
+                } else {
+                    IImove = $(this);
+                    console.log("II move " + $(IImove).attr("class"));
+                    if ( $(Imove).attr("class") ===  $(IImove).attr("class")) {
+                        Score(score += 200);
+                    }
+                    turn=0;
+                }
+            console.log("Turn : " + turn);
+
+            numOfMoves(++move);
         });
         event.preventDefault();
     })
@@ -24,8 +45,8 @@ var Card = function (name,front) {
 };
     Card.prototype = {
     toString: function () {
-        return this.name;
-    },
+            return this.name;
+        },
     AddToArray: function (arr,imgs) {
             var card = new Card("card"+i,imgs[i]);
             arrayOfCards.push(card);
@@ -33,24 +54,29 @@ var Card = function (name,front) {
     }
 };
 //--------------------------------------------------------------------------------------------
-
-
-
 let arrayOfCards = [];
+const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
+    'images/dolphin-marine-mammals-water-sea-64219-min.png',
+    'images/melody-p-378512-min.png',
+    'images/night-garden-yellow-animal-min.png',
+    'images/pexels-photo-148182-min.png',
+    'images/pexels-photo-164186-min.png',
+    'images/pexels-photo-485294-min.png',
+    'images/pexels-photo-551628-min.png'];
+
+
 function buildTable(NumOfPairs) {
-    const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
-        'images/dolphin-marine-mammals-water-sea-64219-min.png',
-        'images/melody-p-378512-min.png',
-        'images/night-garden-yellow-animal-min.png',
-        'images/pexels-photo-148182-min.png',
-        'images/pexels-photo-164186-min.png',
-        'images/pexels-photo-485294-min.png',
-        'images/pexels-photo-551628-min.png'];
-
     $("table").remove();
-
+    //shuffling pairs
     addAllCardsToArray(arrayOfCards,imgs);
     arrayOfCards = shuffle(arrayOfCards);
+    let FirstHalfOfPairs = arrayOfCards.slice(0,NumOfPairs);
+    let SecondHalfOfPairs = FirstHalfOfPairs.slice();
+    SecondHalfOfPairs = shuffle(SecondHalfOfPairs);
+    arrayOfCards = [];
+    arrayOfCards = FirstHalfOfPairs.concat(SecondHalfOfPairs);
+
+    //Create Table
     let table = document.createElement("table");
     document.body.appendChild(table);
     let max = NumOfPairs*2;
@@ -59,8 +85,8 @@ function buildTable(NumOfPairs) {
         $("table").append("<tr>");
         }
         $("tr").last().append("<td>");
-       $("td").last().prepend("<div class='flip-container' onclick='this.classList.toggle(hover)'>");
-        $(".flip-container").last().prepend("<div class='flipper "+arrayOfCards[i].name+"'>");
+        $("td").last().prepend("<div class='flip-container "+arrayOfCards[i].name+"' onclick='this.classList.toggle(hover)'>");
+        $(".flip-container").last().prepend("<div class='flipper '>");
         //Add cards front and back side of the card
         $(".flipper").last().prepend("<div class='back'>");
         $(".back").last().prepend("<img src="+arrayOfCards[i].front+" >");
@@ -68,18 +94,6 @@ function buildTable(NumOfPairs) {
         $(".front").last().prepend("<img src="+arrayOfCards[i].back+" >");
     }
 }
-/* for(let i = 0; i<NumOfRows;i++){
-        $("table").append("<tr>");
-        for(let j = 0;j<NumofCols;j++){
-            $("tr").last().append("<td>");
-            $("td").last().prepend("<div class='flip-container' onclick='this.classList.toggle(hover)'>");
-            $(".flip-container").last().prepend("<div class='flipper "+arrayOfCards[j].name+"'>");
-            //Add cards front and back side of the card
-            $(".flipper").last().prepend("<div class='back'>");
-            $(".back").last().prepend("<img src="+arrayOfCards[j].front+" >");
-            $(".back").last().after("<div class='front'>");
-            $(".front").last().prepend("<img src="+arrayOfCards[j].back+" >");*/
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -107,10 +121,11 @@ function numOfMoves(move) {
     $("#Moves").text("Moves: "+move)
 }
 
-function Score() {
-    let click1 ;
-    let click2 ;
-$("#Score").text("Score: ")
+function Score(val) {
+  if(val === undefined){
+      val = 0;
+  }
+$("#Score").text("Score: " + val);
 }
 function increment(digit, maxNum) {
     if(digit >= 0 && digit < maxNum) {
@@ -134,24 +149,8 @@ function addAllCardsToArray (arr,imgs) {
         arrayOfCards.push(card);
         console.log(card + " " + card.name + " " + card.front + " " + card.back);
     }
-
 }
 
-function turnCSS(elem) {
-    $(elem)
-        .addClass("flipping")
-        .bind("transitionend webkittransitionend", function () { //should add more prefixes
-            let src = $(elem).attr("src");
-            if(src === undefined || src === elem.front){
-                $(this).attr("src",elem.back);
-            } else {
-               $(this).attr("src",elem.front);
-            }
-            $(this)
-                .unbind("transitionend webkittransitionend")
-                .removeClass("flipping")
-        })
-}
 
 
 
