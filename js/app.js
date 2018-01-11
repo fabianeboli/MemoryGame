@@ -1,3 +1,28 @@
+let arrayOfCards = [];
+const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
+    'images/dolphin-marine-mammals-water-sea-64219-min.png',
+    'images/melody-p-378512-min.png',
+    'images/night-garden-yellow-animal-min.png',
+    'images/pexels-photo-148182-min.png',
+    'images/pexels-photo-164186-min.png',
+    'images/pexels-photo-485294-min.png',
+    'images/pexels-photo-551628-min.png'];
+// --------------------------------Card Class-------------------------------------------------
+var Card = function (name,front) {
+    this.name = name;
+    this.front = front;
+    this.back = 'images/cardsBack/Background.jpg';
+};
+Card.prototype = {
+    toString: function () {
+        return this.name;
+    },
+    AddToArray: function (arr,imgs) {
+        var card = new Card("card"+i,imgs[i]);
+        arrayOfCards.push(card);
+        console.log(card + " " + card.name + " " + card.front + " " + card.back);
+    }
+};
 //------------------------------Build the game field-------------------------------------------
 $(function () {
     $("#submit").on("click",function (event) {
@@ -5,16 +30,18 @@ $(function () {
         let move = 0;
         let score = 0;
         let turn = 0;
-        let Imove,IImove;
+        let Imove, IImove;
 
         buildTable(NUMPAIR);
-        Stoper();
+        // Initiate Stopper, Moves and Score counter
+        Stopper();
         numOfMoves(move);
         Score(score);
 
-        $(document).on("click",".flip-container",function () {
+        $(document).on("click",".flip-container",async function () {
             $(this).toggleClass('hover');
             if (turn === 0) {
+
                 if(Imove !== undefined && IImove !== undefined){
                     $(IImove).toggleClass('hover');
                     $(Imove).toggleClass('hover');
@@ -27,60 +54,45 @@ $(function () {
                     console.log("II move " + $(IImove).attr("class"));
                     if ( $(Imove).attr("class") ===  $(IImove).attr("class")) {
                         Score(score += 200);
+                        //Remove matched cards from the field
+                        await sleep(600);
+                        remove(arrayOfCards,$(IImove).attr("class").split(' ')[1]);
+                        remove(arrayOfCards,$(Imove).attr("class").split(' ')[1]);
+                        /*arrayOfCards.remove($(IImove).attr("class").split(' ')[1]);
+                        arrayOfCards.remove($(Imove).attr("class").split(' ')[1]);*/
+                        $(IImove).remove();
+                        $(Imove).remove();
+                        console.log(arrayOfCards);
+                        if(arrayOfCards.length === 0){
+                            alert("Game Won!");
+                        }
+
                     }
                     turn=0;
                 }
             console.log("Turn : " + turn);
-
             numOfMoves(++move);
         });
         event.preventDefault();
     })
 });
-// --------------------------------Card Class-------------------------------------------------
-var Card = function (name,front) {
-    this.name = name;
-    this.front = front;
-    this.back = 'images/cardsBack/Background.jpg';
-};
-    Card.prototype = {
-    toString: function () {
-            return this.name;
-        },
-    AddToArray: function (arr,imgs) {
-            var card = new Card("card"+i,imgs[i]);
-            arrayOfCards.push(card);
-            console.log(card + " " + card.name + " " + card.front + " " + card.back);
-    }
-};
-//--------------------------------------------------------------------------------------------
-let arrayOfCards = [];
-const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
-    'images/dolphin-marine-mammals-water-sea-64219-min.png',
-    'images/melody-p-378512-min.png',
-    'images/night-garden-yellow-animal-min.png',
-    'images/pexels-photo-148182-min.png',
-    'images/pexels-photo-164186-min.png',
-    'images/pexels-photo-485294-min.png',
-    'images/pexels-photo-551628-min.png'];
 
+//--------------------------------------------------------------------------------------------
 
 function buildTable(NumOfPairs) {
     $("table").remove();
     //shuffling pairs
     addAllCardsToArray(arrayOfCards,imgs);
-    arrayOfCards = shuffle(arrayOfCards);
     let FirstHalfOfPairs = arrayOfCards.slice(0,NumOfPairs);
     let SecondHalfOfPairs = FirstHalfOfPairs.slice();
-    SecondHalfOfPairs = shuffle(SecondHalfOfPairs);
     arrayOfCards = [];
     arrayOfCards = FirstHalfOfPairs.concat(SecondHalfOfPairs);
-
+    arrayOfCards = shuffle(arrayOfCards);
     //Create Table
     let table = document.createElement("table");
     document.body.appendChild(table);
-    let max = NumOfPairs*2;
-    for(let i = 0; i< max;i++ ) {
+    let NumOfCards = NumOfPairs*2;
+    for(let i = 0; i< NumOfCards;i++ ) {
     if(i % 5 === 0){
         $("table").append("<tr>");
         }
@@ -98,7 +110,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 //-------------------------------------------------- GAME LOGIC --------------------------------------------------------
-async function Stoper() {
+async function Stopper() {
     let M=0; // Minutes
     let MS=0; // Second digit of seconds
     let S=0; // First digit of seconds
@@ -146,11 +158,16 @@ function shuffle(a) {
 function addAllCardsToArray (arr,imgs) {
     for(let i = 0;i<imgs.length;i++){
         let card = new Card("Card"+i,imgs[i]);
-        arrayOfCards.push(card);
+        arr.push(card);
         console.log(card + " " + card.name + " " + card.front + " " + card.back);
     }
+    return shuffle(arr);
 }
 
+function remove(arr,el) {
+    const index = arr.indexOf(el);
+    arr.splice(index,1);
+}
 
 
 
