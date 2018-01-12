@@ -1,3 +1,5 @@
+
+
 let arrayOfCards = [];
 const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
     'images/dolphin-marine-mammals-water-sea-64219-min.png',
@@ -23,13 +25,12 @@ Card.prototype = {
         console.log(card + " " + card.name + " " + card.front + " " + card.back);
     }
 };
+let refreshPage;
 //------------------------------Build the game field-------------------------------------------
 $(function () {
-    $("#submit").on("click",function (event) {
+    $("#submit").on("click",function () {
         const NUMPAIR = $("#NumPairs").val();
-        let move = 0;
-        let score = 0;
-        let turn = 0;
+        let move = 0,score = 0,turn = 0;
         let Imove, IImove;
 
         buildTable(NUMPAIR);
@@ -41,7 +42,6 @@ $(function () {
         $(document).on("click",".flip-container",async function () {
             $(this).toggleClass('hover');
             if (turn === 0) {
-
                 if(Imove !== undefined && IImove !== undefined){
                     $(IImove).toggleClass('hover');
                     $(Imove).toggleClass('hover');
@@ -58,25 +58,21 @@ $(function () {
                         await sleep(600);
                         remove(arrayOfCards,$(IImove).attr("class").split(' ')[1]);
                         remove(arrayOfCards,$(Imove).attr("class").split(' ')[1]);
-                        /*arrayOfCards.remove($(IImove).attr("class").split(' ')[1]);
-                        arrayOfCards.remove($(Imove).attr("class").split(' ')[1]);*/
                         $(IImove).remove();
                         $(Imove).remove();
                         console.log(arrayOfCards);
                         if(arrayOfCards.length === 0){
                             alert("Game Won!");
+                            location.reload();
                         }
-
                     }
                     turn=0;
                 }
             console.log("Turn : " + turn);
             numOfMoves(++move);
         });
-        event.preventDefault();
     })
 });
-
 //--------------------------------------------------------------------------------------------
 
 function buildTable(NumOfPairs) {
@@ -93,17 +89,7 @@ function buildTable(NumOfPairs) {
     document.body.appendChild(table);
     let NumOfCards = NumOfPairs*2;
     for(let i = 0; i< NumOfCards;i++ ) {
-    if(i % 5 === 0){
-        $("table").append("<tr>");
-        }
-        $("tr").last().append("<td>");
-        $("td").last().prepend("<div class='flip-container "+arrayOfCards[i].name+"' onclick='this.classList.toggle(hover)'>");
-        $(".flip-container").last().prepend("<div class='flipper '>");
-        //Add cards front and back side of the card
-        $(".flipper").last().prepend("<div class='back'>");
-        $(".back").last().prepend("<img src="+arrayOfCards[i].front+" >");
-        $(".back").last().after("<div class='front'>");
-        $(".front").last().prepend("<img src="+arrayOfCards[i].back+" >");
+        addNewCardPlaceHolder(arrayOfCards,5,i);
     }
 }
 function sleep(ms) {
@@ -144,7 +130,7 @@ function increment(digit, maxNum) {
         return ++digit;
     }
 }
-
+//---------------------------------------------------HELPER FUNCTIONS---------------------------------------------------
 // Add cards to array in random order
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -168,7 +154,19 @@ function remove(arr,el) {
     const index = arr.indexOf(el);
     arr.splice(index,1);
 }
-
+function addNewCardPlaceHolder(arr,nthRow,index) {
+    if(index % nthRow === 0){
+        $("table").append("<tr>");
+    }
+    $("tr").last().append("<td>");
+    $("td").last().prepend("<div class='flip-container "+arr[index].name+"' onclick='this.classList.toggle(hover)'>");
+    $(".flip-container").last().prepend("<div class='flipper '>");
+    //Add cards front and back side of the card
+    $(".flipper").last().prepend("<div class='back'>");
+    $(".back").last().prepend("<img src="+arr[index].front+" >");
+    $(".back").last().after("<div class='front'>");
+    $(".front").last().prepend("<img src="+arr[index].back+" >");
+}
 
 
 
