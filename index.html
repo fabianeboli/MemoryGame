@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>
-    </title>
+    <title>Memory Game</title>
 </head>
+<link href="https://fonts.googleapis.com/css?family=Aldrich" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Space+Mono:400,700" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <body>
-<div id="Time"></div>
-<div id="Moves"></div>
-<div id="Score"></div>
-    <form class="form-inline">
-        <label for="NumPairs">Number of pairs</label>
+<div class="wrapper">
+    <div id="Time" class="stats">Time: </div>
+    <div id="Moves" class="stats">Moves:</div>
+    <div id="Score" class="stats">Score: </div>
+    <form class="form-inline " >
+        <label for="NumPairs" >Number of pairs:</label>
         <input type="number" id="NumPairs" min="1" max="8" name="NumPairs">
-    <!--<label for="NumRows">Number of rows</label>
-    <input type="number" id="NumRows" min="1" max="8" name="NumRows" >
-    <label for="NumCol">Number of columns</label>
-    <input type="number" id="NumCol" min="1" max="8" name="NumCols" >-->
-    <input type="button" id="submit" value="New game">
-</form>
+        <input type="button" id="submit" value="New game">
+    </form>
+</div>
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

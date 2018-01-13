@@ -25,7 +25,7 @@ Card.prototype = {
         console.log(card + " " + card.name + " " + card.front + " " + card.back);
     }
 };
-let refreshPage;
+
 //------------------------------Build the game field-------------------------------------------
 $(function () {
     $("#submit").on("click",function () {
@@ -48,11 +48,17 @@ $(function () {
                 }
                     Imove = $(this);
                     console.log("I move " + $(Imove).attr("class"));
+                   /* $(Imove).addClass("chkSame");*/
+                    console.log("class turn: " + $(Imove).attr("class").split(' ')[3]);
                     ++turn;
                 } else {
                     IImove = $(this);
-                    console.log("II move " + $(IImove).attr("class"));
-                    if ( $(Imove).attr("class") ===  $(IImove).attr("class")) {
+                    //$(IImove).addClass("IImove");
+                    console.log("II move " + $(IImove).attr("class").split(' ')[2]);
+                    console.log("class turn: " + $(IImove).attr("class").split(' ')[3]);
+
+                    if ( $(Imove).attr("class") ===  $(IImove).attr("class"))
+                       /* && ($(Imove).attr("class").split(' ')[3] == "Imove" &&  $(Imove).attr("class").split(' ')[3] == "Imove"))*/ {
                         Score(score += 200);
                         //Remove matched cards from the field
                         await sleep(600);
@@ -65,7 +71,10 @@ $(function () {
                             alert("Game Won!");
                             location.reload();
                         }
-                    }
+                    } /*else {
+                        $(Imove).removeClass("Imove");
+                        $(IImove).removeClass("IImove");
+                    }*/
                     turn=0;
                 }
             console.log("Turn : " + turn);
@@ -74,7 +83,6 @@ $(function () {
     })
 });
 //--------------------------------------------------------------------------------------------
-
 function buildTable(NumOfPairs) {
     $("table").remove();
     //shuffling pairs
