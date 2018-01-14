@@ -15,17 +15,6 @@ var Card = function (name,front) {
     this.front = front;
     this.back = 'images/cardsBack/Background.jpg';
 };
-Card.prototype = {
-    toString: function () {
-        return this.name;
-    },
-    AddToArray: function (arr,imgs) {
-        var card = new Card("card"+i,imgs[i]);
-        arrayOfCards.push(card);
-        console.log(card + " " + card.name + " " + card.front + " " + card.back);
-    }
-};
-
 //------------------------------Build the game field-------------------------------------------
 $(function () {
     $("#submit").on("click",function () {
@@ -68,17 +57,13 @@ $(function () {
                         $(Imove).remove();
                         console.log(arrayOfCards);
                         if(arrayOfCards.length === 0){
-                            $("#ScoreDialog").append(`Score: ${score} <br> <br> Final Score: ${finalScore(score,move)}`);
+                            Stopper();
+                            $("#ScoreDialog").append(`Score: ${score} <br> Time: ${M+":"+MS+""+S} <br> <br> Final Score: ${finalScore(score,move)}`);
                             $("#ScoreDialog").dialog("open");
                             $(".ui-button").on("click", function () {
                                 location.reload();
                             });
                         }
-
-
-                            //alert("Game Won! Final Score " + finalScore(score,move) );
-                           // if($("#ScoreDialog").dialog())
-                          //
                     } else {
                         $(Imove).removeClass("Imove");
                         $(IImove).removeClass("IImove");
@@ -130,6 +115,7 @@ async function Stopper() {
         }
         $("#Time").text("Time: "+M+":"+MS+""+S) ;
     }
+
 }
 function numOfMoves(move) {
     $("#Moves").text("Moves: "+move)
@@ -154,9 +140,11 @@ function finalScore(score,numOfMoves) {
 $("#ScoreDialog").dialog({
     autoOpen: false,
     modal: true,
-    /*buttons: {
-        OK: function () { $(this).dialog("close"); }
-    }*/
+    show: {
+        effect: 'fade',
+        duration: 600
+    }
+
 });
 
 
