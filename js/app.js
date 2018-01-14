@@ -1,8 +1,7 @@
 let NUMPAIR;
 
 let arrayOfCards = [];
-const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
-    'images/dolphin-marine-mammals-water-sea-64219-min.png',
+const imgs = ['images/dolphin-marine-mammals-water-sea-64219-min.png',
     'images/melody-p-378512-min.png',
     'images/night-garden-yellow-animal-min.png',
     'images/pexels-photo-148182-min.png',
@@ -19,6 +18,9 @@ var Card = function (name,front) {
 $(function () {
     $("#submit").on("click",function () {
         NUMPAIR = $("#NumPairs").val();
+        if(NUMPAIR > 7){
+            NUMPAIR = 7;
+        }
         var move = 0,score = 0,turn = 0;
         let Imove, IImove;
 
@@ -137,7 +139,6 @@ function increment(digit, maxNum) {
 function finalScore(score,numOfMoves) {
     return Math.ceil(score*NUMPAIR*4/((S+MS*5+M*10)/numOfMoves));
 }
-
 //Dialog Button
 $("#ScoreDialog").dialog({
     autoOpen: false,
@@ -166,6 +167,18 @@ function addAllCardsToArray (arr,imgs) {
     }
     return shuffle(arr);
 }
+/*function checkIfCorrect() {
+    $("input").keydown(function () {
+        $(this).data("old",$(this).val());
+    });
+    $("input").keyup(function () {
+        if(parseInt($(this).val()) <= 8 && parseInt($(this).val()) >= 1){}
+            else{
+                $(this).val($(this).data("old"));
+            }
+        });
+    });
+}*/
 
 function remove(arr,el) {
     const index = arr.indexOf(el);
