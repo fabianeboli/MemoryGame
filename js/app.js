@@ -1,4 +1,4 @@
-
+let NUMPAIR;
 
 let arrayOfCards = [];
 const imgs = ['images/dog-hovawart-black-pet-89775-min.png',
@@ -29,8 +29,8 @@ Card.prototype = {
 //------------------------------Build the game field-------------------------------------------
 $(function () {
     $("#submit").on("click",function () {
-        const NUMPAIR = $("#NumPairs").val();
-        let move = 0,score = 0,turn = 0;
+        NUMPAIR = $("#NumPairs").val();
+        var move = 0,score = 0,turn = 0;
         let Imove, IImove;
 
         buildTable(NUMPAIR);
@@ -68,9 +68,17 @@ $(function () {
                         $(Imove).remove();
                         console.log(arrayOfCards);
                         if(arrayOfCards.length === 0){
-                            alert("Game Won!");
-                            location.reload();
+                            $("#ScoreDialog").append(`Score: ${score} <br> <br> Final Score: ${finalScore(score,move)}`);
+                            $("#ScoreDialog").dialog("open");
+                            $(".ui-button").on("click", function () {
+                                location.reload();
+                            });
                         }
+
+
+                            //alert("Game Won! Final Score " + finalScore(score,move) );
+                           // if($("#ScoreDialog").dialog())
+                          //
                     } else {
                         $(Imove).removeClass("Imove");
                         $(IImove).removeClass("IImove");
@@ -104,10 +112,10 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 //-------------------------------------------------- GAME LOGIC --------------------------------------------------------
+let M=0; // Minutes
+let MS=0; // Second digit of seconds
+let S=0; // First digit of seconds
 async function Stopper() {
-    let M=0; // Minutes
-    let MS=0; // Second digit of seconds
-    let S=0; // First digit of seconds
     while (true){
         await sleep(1000);
         if(MS ===5 && S ===9) {
@@ -138,6 +146,20 @@ function increment(digit, maxNum) {
         return ++digit;
     }
 }
+function finalScore(score,numOfMoves) {
+    return Math.ceil(score*NUMPAIR*4/((S+MS*5+M*10)/numOfMoves));
+}
+
+//Dialog Button
+$("#ScoreDialog").dialog({
+    autoOpen: false,
+    modal: true,
+    /*buttons: {
+        OK: function () { $(this).dialog("close"); }
+    }*/
+});
+
+
 //---------------------------------------------------HELPER FUNCTIONS---------------------------------------------------
 // Add cards to array in random order
 function shuffle(a) {
