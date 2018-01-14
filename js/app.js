@@ -48,17 +48,17 @@ $(function () {
                 }
                     Imove = $(this);
                     console.log("I move " + $(Imove).attr("class"));
-                   /* $(Imove).addClass("chkSame");*/
+                    $(Imove).addClass("Imove");
                     console.log("class turn: " + $(Imove).attr("class").split(' ')[3]);
                     ++turn;
                 } else {
                     IImove = $(this);
-                    //$(IImove).addClass("IImove");
+                    $(IImove).addClass("IImove");
                     console.log("II move " + $(IImove).attr("class").split(' ')[2]);
                     console.log("class turn: " + $(IImove).attr("class").split(' ')[3]);
 
-                    if ( $(Imove).attr("class") ===  $(IImove).attr("class"))
-                       /* && ($(Imove).attr("class").split(' ')[3] == "Imove" &&  $(Imove).attr("class").split(' ')[3] == "Imove"))*/ {
+                    if (( $(Imove).attr("class").split(' ')[1] ===  $(IImove).attr("class").split(' ')[1]) &&
+                            ($(IImove).attr("class").split(' ')[3] !==  $(Imove).attr("class").split(' ')[3])) {
                         Score(score += 200);
                         //Remove matched cards from the field
                         await sleep(600);
@@ -71,10 +71,10 @@ $(function () {
                             alert("Game Won!");
                             location.reload();
                         }
-                    } /*else {
+                    } else {
                         $(Imove).removeClass("Imove");
                         $(IImove).removeClass("IImove");
-                    }*/
+                    }
                     turn=0;
                 }
             console.log("Turn : " + turn);
