@@ -1,7 +1,8 @@
 let NUMPAIR;
 
 let arrayOfCards = [];
-const imgs = ['images/dolphin-marine-mammals-water-sea-64219-min.png',
+const imgs = [
+    'images/dolphin-marine-mammals-water-sea-64219-min.png',
     'images/melody-p-378512-min.png',
     'images/night-garden-yellow-animal-min.png',
     'images/pexels-photo-148182-min.png',
