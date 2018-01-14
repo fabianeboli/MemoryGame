@@ -10,7 +10,11 @@
     width: 100%;
     overflow: auto;
 }
-
+.remove{
+    transform: translate(600%,120%);
+    opacity: 0;
+    transition: 1.0s ease-in;
+}
 .stats{
     padding-right: 4%;
     padding-left: 4%;

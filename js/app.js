@@ -48,19 +48,21 @@ $(function () {
 
                     if (( $(Imove).attr("class").split(' ')[1] ===  $(IImove).attr("class").split(' ')[1]) &&
                             ($(IImove).attr("class").split(' ')[3] !==  $(Imove).attr("class").split(' ')[3])) {
+                        Imove.toggleClass("remove");
+                        IImove.toggleClass("remove");
                         Score(score += 200);
                         //Remove matched cards from the field
                         await sleep(600);
                         remove(arrayOfCards,$(IImove).attr("class").split(' ')[1]);
                         remove(arrayOfCards,$(Imove).attr("class").split(' ')[1]);
-                        $(IImove).remove();
-                        $(Imove).remove();
                         console.log(arrayOfCards);
                         if(arrayOfCards.length === 0){
-                            Stopper();
                             $("#ScoreDialog").append(`Score: ${score} <br> Time: ${M+":"+MS+""+S} <br> <br> Final Score: ${finalScore(score,move)}`);
                             $("#ScoreDialog").dialog("open");
                             $(".ui-button").on("click", function () {
+                                location.reload();
+                            });
+                            $("#submit").on("click", function () {
                                 location.reload();
                             });
                         }
@@ -144,10 +146,7 @@ $("#ScoreDialog").dialog({
         effect: 'fade',
         duration: 600
     }
-
 });
-
-
 //---------------------------------------------------HELPER FUNCTIONS---------------------------------------------------
 // Add cards to array in random order
 function shuffle(a) {
