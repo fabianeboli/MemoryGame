@@ -168,18 +168,6 @@ function addAllCardsToArray (arr,imgs) {
     }
     return shuffle(arr);
 }
-/*function checkIfCorrect() {
-    $("input").keydown(function () {
-        $(this).data("old",$(this).val());
-    });
-    $("input").keyup(function () {
-        if(parseInt($(this).val()) <= 8 && parseInt($(this).val()) >= 1){}
-            else{
-                $(this).val($(this).data("old"));
-            }
-        });
-    });
-}*/
 
 function remove(arr,el) {
     const index = arr.indexOf(el);
