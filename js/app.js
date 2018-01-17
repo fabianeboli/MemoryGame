@@ -1,5 +1,4 @@
 let NUMPAIR;
-
 let arrayOfCards = [];
 const imgs = [
     'images/dolphin-marine-mammals-water-sea-64219-min.png',
@@ -22,7 +21,7 @@ $(function () {
         if(NUMPAIR > 7){
             NUMPAIR = 7;
         }
-        var move = 0,score = 0,turn = 0;
+        let move = 0,score = 0,turn = 0;
         let Imove, IImove;
 
         buildTable(NUMPAIR);
@@ -39,43 +38,14 @@ $(function () {
                     $(Imove).toggleClass('hover');
                 }
                     Imove = $(this);
-                    console.log("I move " + $(Imove).attr("class"));
                     $(Imove).addClass("Imove");
-                    console.log("class turn: " + $(Imove).attr("class").split(' ')[3]);
                     ++turn;
                 } else {
                     IImove = $(this);
                     $(IImove).addClass("IImove");
-                    console.log("II move " + $(IImove).attr("class").split(' ')[2]);
-                    console.log("class turn: " + $(IImove).attr("class").split(' ')[3]);
-
-                    if (( $(Imove).attr("class").split(' ')[1] ===  $(IImove).attr("class").split(' ')[1]) &&
-                            ($(IImove).attr("class").split(' ')[3] !==  $(Imove).attr("class").split(' ')[3])) {
-                        Imove.toggleClass("remove");
-                        IImove.toggleClass("remove");
-                        Score(score += 200);
-                        //Remove matched cards from the field
-                        await sleep(600);
-                        remove(arrayOfCards,$(IImove).attr("class").split(' ')[1]);
-                        remove(arrayOfCards,$(Imove).attr("class").split(' ')[1]);
-                        console.log(arrayOfCards);
-                        if(arrayOfCards.length === 0){
-                            $("#ScoreDialog").append(`Score: ${score} <br> Time: ${M+":"+MS+""+S} <br> <br> Final Score: ${finalScore(score,move)}`);
-                            $("#ScoreDialog").dialog("open");
-                            $(".ui-button").on("click", function () {
-                                location.reload();
-                            });
-                            $("#submit").on("click", function () {
-                                location.reload();
-                            });
-                        }
-                    } else {
-                        $(Imove).removeClass("Imove");
-                        $(IImove).removeClass("IImove");
-                    }
+                    checkPairsOfCards(Imove,IImove,score,move);
                     turn=0;
                 }
-            console.log("Turn : " + turn);
             numOfMoves(++move);
         });
     })
@@ -149,6 +119,36 @@ $("#ScoreDialog").dialog({
         duration: 600
     }
 });
+async function checkPairsOfCards (Imove,IImove,score,move) {
+    if (( $(Imove).attr("class").split(' ')[1] ===  $(IImove).attr("class").split(' ')[1]) &&
+        ($(IImove).attr("class").split(' ')[3] !==  $(Imove).attr("class").split(' ')[3])) {
+        Imove.toggleClass("remove");
+        IImove.toggleClass("remove");
+        Score(score += 200);
+        //Remove matched cards from the field
+        await sleep(600);
+        remove(arrayOfCards,$(IImove).attr("class").split(' ')[1]);
+        remove(arrayOfCards,$(Imove).attr("class").split(' ')[1]);
+        checkIfGameWon(arrayOfCards,score,move);
+    } else {
+        $(Imove).removeClass("Imove");
+        $(IImove).removeClass("IImove");
+    }
+}
+
+function checkIfGameWon(arr,score,move) {
+    if(arr.length === 0){
+        $("#ScoreDialog").append(`Score: ${score} <br> Time: ${M+":"+MS+""+S} <br> <br> Final Score: ${finalScore(score,move)}`);
+        $("#ScoreDialog").dialog("open");
+        $(".ui-button").on("click", function () {
+            location.reload();
+        });
+        $("#submit").on("click", function () {
+            location.reload();
+        });
+    }
+}
+
 //---------------------------------------------------HELPER FUNCTIONS---------------------------------------------------
 // Add cards to array in random order
 function shuffle(a) {
